@@ -31,6 +31,13 @@ x-backend: &backend
     FILESYSTEM_DISK: local
     LOG_CHANNEL: daily
     LOG_LEVEL: info
+    SANCTUM_STATEFUL_DOMAINS: ${PORTAL_HOST:-portal.bulsca.co.uk}
+    AUTHENTIK_ENABLED: ${AUTHENTIK_ENABLED:-false}
+    AUTHENTIK_BASE_URL: ${AUTHENTIK_BASE_URL:-}
+    AUTHENTIK_ISSUER: ${AUTHENTIK_ISSUER:-}
+    AUTHENTIK_CLIENT_ID: ${AUTHENTIK_CLIENT_ID:-}
+    AUTHENTIK_CLIENT_SECRET: ${AUTHENTIK_CLIENT_SECRET:-}
+    AUTHENTIK_REDIRECT_URI: https://${PORTAL_HOST:-portal.bulsca.co.uk}/auth/sso/callback
     SSO_ENABLED: ${SSO_ENABLED:-true}
     SSO_AUTH_SERVER: ${SSO_AUTH_SERVER:-https://auth.bulsca.co.uk}
     SSO_CLIENT_ID: ${SSO_CLIENT_ID:-bulsca}
