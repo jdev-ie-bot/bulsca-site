@@ -89,7 +89,6 @@ Route::middleware('auth')->group(function () {
 
 
 // ========= SSO AUTH ROUTES ==========
-Route::middleware('guest')->group(function() {
-    Route::get('/auth/sso', [SSOAuthController::class, 'redirectToSSO'])->name('auth.sso');
-    Route::get('/auth/sso/callback', [SSOAuthController::class, 'handleCallback'])->name('auth.sso.callback');
-});
+// A legacy session can authenticate with Authentik to enter the standalone portal.
+Route::get('/auth/sso', [SSOAuthController::class, 'redirectToSSO'])->name('auth.sso');
+Route::get('/auth/sso/callback', [SSOAuthController::class, 'handleCallback'])->name('auth.sso.callback');

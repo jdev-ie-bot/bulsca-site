@@ -21,6 +21,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('uni-logo/{uni_name}', 'App\Http\Controllers\UniversityController@getLogo');
 
+// Keep the public API stateless. Only first-party portal requests may load a user session.
+Route::get('v1/me', [\App\Http\Controllers\Api\V1\PortalController::class, 'me'])
+    ->middleware([\Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class, 'auth:web', \App\Http\Middleware\RequireAuthentikSession::class])
+    ->name('api.v1.me');
+
 Route::prefix('v1')->name('api.v1.')->group(function () {
     Route::get('presentation', [\App\Http\Controllers\Api\V1\PresentationController::class, 'presentation']);
     Route::get('notice', [\App\Http\Controllers\Api\V1\PresentationController::class, 'notice']);

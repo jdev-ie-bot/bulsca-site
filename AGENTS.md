@@ -5,11 +5,11 @@
 - This repository is `BULSCA/bulsca-site`, the authoritative Laravel backend. Sibling `../admin-panel` contains the standalone Vue member portal; `../bulsca-frontend` contains the public Vue website.
 - Use `CODEX/` feature branches and PRs into `release/public-site-v1`. Only release branches omit that prefix. Keep focused commits; do not merge, force-push or delete branches without explicit instructions.
 - The owner prohibits application/asset builds, container image builds and deployment. Tests, lint, type checks and development servers are permitted. Production migrations, initial user grants and deployment verification belong to the owner.
-- Preserve the existing public API contracts, legacy portal and stored data. Do not replace the retained authentication protocol or import old administrators as new privileges without an explicit migration plan.
+- Preserve the public API, legacy site login and stored memberships during the Authentik migration. Follow the reconciliation guide for reviewed account links. Authority for roles and clubs stays in Laravel.
 
 ## Organisation portal: start here
 
-Read the README's "Organisation portal API" section. Backend branch `CODEX/organisation-memberships` pairs with portal branch `CODEX/organisation-portal`.
+Read the README's "Organisation portal API" section. The Authentik integration uses the paired `CODEX/authentik-members` branches.
 
 | Concern | Source |
 | --- | --- |
@@ -17,7 +17,7 @@ Read the README's "Organisation portal API" section. Backend branch `CODEX/organ
 | Domain models | `app/Models/Portal/` (separate from existing public committee models) |
 | Authorisation and permission catalogue | `app/Services/PortalAccess.php` |
 | Private API and session routes | `app/Http/Controllers/Api/V1/PortalController.php`, `routes/portal.php` |
-| Existing SSO protocol and secure session handling | `app/Http/Controllers/Auth/SSOAuthController.php` |
+| Portal Authentik login, legacy SSO and reconciliation | `app/Http/Controllers/Auth/AuthentikPortalLogin.php`, `SSOAuthController.php`, [operator guide](docs/authentik-reconciliation.md) |
 | Explicit initial grant and audit retention | `app/Console/Commands/BootstrapPortal.php`, `PrunePortalAudit.php` |
 | Public club logo override | `PeopleController.php`, `University::portalOrganisation()` |
 | Feature/security tests | `tests/Feature/Api/PortalTest.php`, `PortalAuthenticationTest.php`, `PublicBrowsingTest.php` |
@@ -39,4 +39,4 @@ PHP 8.3 and MySQL 8.4 are exercised in CI. Install development dependencies and 
 
 Before the wrap-up, the full local suite passed 109 tests; a later regression test verifies that explicit bootstrap restores a revoked initial appointment. Fresh GitHub CI is the source of truth for the final commits. PHP tooling installed under `/tmp` in the earlier session was temporary; do not assume it exists. Use installed PHP or CI rather than weakening tests to fit an absent runtime.
 
-The new portal's complete browser flow against this API and real SSO still needs acceptance. The current release container continues to serve legacy portal pages; the standalone Vue cutover and production onboarding are separate owner-run steps. Existing public biographies/administrators are not automatically migrated. Account invitations/provisioning and new competition/content editing permissions are not implemented. Use focused follow-up work rather than an architectural rewrite.
+The paired portal repository runs a real-browser test against this API with a loopback Authentik provider. Verify real provider configuration and representative account mappings in staging. The current release container continues to serve legacy portal pages; the standalone Vue cutover and production onboarding are separate owner-run steps. Existing public biographies/administrators are not automatically migrated. Account invitations/provisioning and new competition/content editing permissions are not implemented. Use focused follow-up work rather than an architectural rewrite.

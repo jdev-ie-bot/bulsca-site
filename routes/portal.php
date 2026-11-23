@@ -4,8 +4,9 @@ use App\Http\Controllers\Api\V1\PortalController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('csrf', fn () => response()->noContent())->name('csrf');
-Route::middleware(['auth', 'throttle:120,1'])->group(function () {
-    Route::post('logout', [\App\Http\Controllers\Auth\SSOAuthController::class, 'logout']);
+// A session can always be closed, including while the provider is disabled.
+Route::post('logout', [\App\Http\Controllers\Auth\SSOAuthController::class, 'logout'])->middleware(['auth', 'throttle:120,1']);
+Route::middleware(['auth', \App\Http\Middleware\RequireAuthentikSession::class, 'throttle:120,1'])->group(function () {
     Route::get('me', [PortalController::class, 'me'])->name('me');
     Route::get('organisations', [PortalController::class, 'index']);
     Route::post('organisations', [PortalController::class, 'store']);

@@ -18,7 +18,7 @@ class ApiRequestContext
         $request->headers->set('Accept', 'application/json');
         $response = $next($request);
         $response->headers->set('X-Request-ID', $request->attributes->get('request_id'));
-        if ($request->is('api/v1/portal/*')) {
+        if ($request->is('api/v1/me', 'api/v1/portal/*')) {
             $response->headers->set('Cache-Control', 'private, no-store');
             $response->setVary('Cookie', false);
         }

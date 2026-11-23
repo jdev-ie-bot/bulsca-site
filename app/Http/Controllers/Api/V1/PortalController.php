@@ -31,6 +31,10 @@ class PortalController extends Controller
         $association = Organisation::where('slug', 'bulsca')->firstOrFail();
         return ['data' => [
             'user' => $user->only(['id', 'name', 'email']),
+            'roles' => $user->getRoleNames()->sort()->values(),
+            'permissions' => $user->getAllPermissions()->pluck('name')->unique()->sort()->values(),
+            'club_ids' => DB::table('user_universities')->where('user', $user->id)->distinct()->orderBy('uni')
+                ->pluck('uni')->map(fn ($id) => (int) $id),
             'organisations' => $organisations->map(fn ($org) => $this->organisationData($user, $org))->values(),
             'association_id' => $association->id,
             'can_administer' => $this->access->root($user) || count($this->access->permissions($user, $association)) > 0,

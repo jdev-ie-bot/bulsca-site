@@ -31,6 +31,16 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'authentik' => [
+        'enabled' => env('AUTHENTIK_ENABLED', false),
+        'base_url' => env('AUTHENTIK_BASE_URL'),
+        'issuer' => env('AUTHENTIK_ISSUER'),
+        'client_id' => env('AUTHENTIK_CLIENT_ID'),
+        'client_secret' => env('AUTHENTIK_CLIENT_SECRET'),
+        'redirect' => env('AUTHENTIK_REDIRECT_URI', rtrim((string) env('APP_URL'), '/').'/auth/sso/callback'),
+        'guzzle' => ['timeout' => 10, 'connect_timeout' => 5, 'allow_redirects' => false],
+    ],
+
     'meta' => [
         'token_path' => storage_path('app/private/meta-token.enc'),
         'access_token' => env('META_ACCESS_TOKEN'),
